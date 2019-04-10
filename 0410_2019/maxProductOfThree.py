@@ -1,5 +1,6 @@
 # you can write to stdout for debugging purposes, e.g.
 # print("this is a debug message")
+# retry 44/100
 from itertools import combinations
 def solution(A):
     # write your code in Python 3.6
