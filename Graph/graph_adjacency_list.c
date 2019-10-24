@@ -2,63 +2,63 @@
 #include<stdlib.h>
 #define MAX_VERTICES 50
 
-//±×·¡ÇÁ Á¤Á¡(³ëµå)
+//ê·¸ë˜í”„ ì •ì (ë…¸ë“œ)
 typedef struct
 {
-    int vertex;//Á¤Á¡
-    struct GraphNode *link; //¿¬°áµÇ¾îÀÖ´Â Á¤Á¡..
+    int vertex;//ì •ì 
+    struct GraphNode *link; //ì—°ê²°ë˜ì–´ìˆëŠ” ì •ì ..
 }GraphNode;
 
-//±×·¡ÇÁ Á¤ÀÇ
+//ê·¸ë˜í”„ ì •ì˜
 typedef struct
 {
-    int n; //Á¤Á¡ÀÇ °³¼ö
+    int n; //ì •ì ì˜ ê°œìˆ˜
 
-    //°¢°¢ÀÇ adj_listÀÇ ¿ø¼ÒµéÀº GraphNode¸¦ °¡¸®Å²´Ù..
-    GraphNode *adj_list[MAX_VERTICES]; //±×·¡ÇÁ ÀÎÁ¢ ¸®½ºÆ®: GraphNode Æ÷ÀÎÅÍ ¹è¿­
+    //ê°ê°ì˜ adj_listì˜ ì›ì†Œë“¤ì€ GraphNodeë¥¼ ê°€ë¦¬í‚¨ë‹¤..
+    GraphNode *adj_list[MAX_VERTICES]; //ê·¸ë˜í”„ ì¸ì ‘ ë¦¬ìŠ¤íŠ¸: GraphNode í¬ì¸í„° ë°°ì—´
 
 }GraphType;
 
-//±×·¡ÇÁ ÃÊ±âÈ­
+//ê·¸ë˜í”„ ì´ˆê¸°í™”
 void graph_init(GraphType *g)
 {
-    //Á¤Á¡ÀÇ °³¼ö 0°³
+    //ì •ì ì˜ ê°œìˆ˜ 0ê°œ
     g->n=0;
 
-    //ÀÎÁ¢¸®½ºÆ®ÀÇ ½ÃÀÛÁ¡µµ
+    //ì¸ì ‘ë¦¬ìŠ¤íŠ¸ì˜ ì‹œì‘ì ë„
     for(int v=0; v<MAX_VERTICES; v++)
-        g->adj_list[v]=NULL;//¾Æ¹«°Íµµ °¡¸®Å°Áö ¾ÊÀº°É·Î ÃÊ±âÈ­
+        g->adj_list[v]=NULL;//ì•„ë¬´ê²ƒë„ ê°€ë¦¬í‚¤ì§€ ì•Šì€ê±¸ë¡œ ì´ˆê¸°í™”
 }
 
-//Á¤Á¡ »ğÀÔ ¿¬»ê
+//ì •ì  ì‚½ì… ì—°ì‚°
 void insert_vertex(GraphType *g, int v)
 {
-    //Á¤Á¡ »ğÀÔÇß´Âµ¥ MAX_VERTICES¸¦ ³Ñ´Â´Ù¸é -> ¿¡·¯¸Ş½ÃÁö Ãâ·ÂÇÏ°í Á¾·á
+    //ì •ì  ì‚½ì…í–ˆëŠ”ë° MAX_VERTICESë¥¼ ë„˜ëŠ”ë‹¤ë©´ -> ì—ëŸ¬ë©”ì‹œì§€ ì¶œë ¥í•˜ê³  ì¢…ë£Œ
     if( (g->n)+1 > MAX_VERTICES){
-        fprintf(stderr, "Á¤Á¡°³¼ö ÃÊ°ú");exit(1);
+        fprintf(stderr, "ì •ì ê°œìˆ˜ ì´ˆê³¼");exit(1);
     }
-    g->n++; //Á¤Á¡°³¼ö(n) Ä«¿îÆ®
+    g->n++; //ì •ì ê°œìˆ˜(n) ì¹´ìš´íŠ¸
 }
 
-//°£¼± »ğÀÔ ¿¬»ê: v¸¦ uÀÇ ÀÎÁ¢¸®½ºÆ®¿¡ »ğÀÔÇÑ´Ù..
+//ê°„ì„  ì‚½ì… ì—°ì‚°: vë¥¼ uì˜ ì¸ì ‘ë¦¬ìŠ¤íŠ¸ì— ì‚½ì…í•œë‹¤..
 void insert_edge(GraphType *g, int u, int v)
 {
-    //½ÃÀÛÁ¡: u (u< g->n)  **g->nÀº ±×·¡ÇÁ ³ëµåÀÇ °³¼ö..
-    //u¿Í ¿¬°áµÈÁ¡: v (v< g->n)
+    //ì‹œì‘ì : u (u< g->n)  **g->nì€ ê·¸ë˜í”„ ë…¸ë“œì˜ ê°œìˆ˜..
+    //uì™€ ì—°ê²°ëœì : v (v< g->n)
     if( u>=(g->n) || v>=(g->n)){
-        fprintf(stderr, "±×·¡ÇÁ Á¤Á¡ ¹øÈ£ ¿À·ù");
+        fprintf(stderr, "ê·¸ë˜í”„ ì •ì  ë²ˆí˜¸ ì˜¤ë¥˜");
         exit(1);
     }
 
-    //³ëµå »ı¼º..
-    //±×·¡ÇÁ ³ëµå(Á¤Á¡)À» °¡¸®Å°´Â Æ÷ÀÎÅÍ »ı¼º.. node´Â GraphNode ±¸Á¶Ã¼ÀÇ Æ÷ÀÎÅÍ..
+    //ë…¸ë“œ ìƒì„±..
+    //ê·¸ë˜í”„ ë…¸ë“œ(ì •ì )ì„ ê°€ë¦¬í‚¤ëŠ” í¬ì¸í„° ìƒì„±.. nodeëŠ” GraphNode êµ¬ì¡°ì²´ì˜ í¬ì¸í„°..
     GraphNode * node=(GraphNode *)malloc(sizeof(GraphNode));
-    //³ëµå ÃÊ±âÈ­
+    //ë…¸ë“œ ì´ˆê¸°í™”
     node->vertex=v;
     node->link = g->adj_list[u];
     g->adj_list[u]=node;
 
-    //¹«¹æÇâ..
+    //ë¬´ë°©í–¥..
     GraphNode* node_reverse=(GraphNode *)malloc(sizeof(GraphNode));
     node_reverse->vertex=u;
     node_reverse->link = g->adj_list[v];
@@ -72,7 +72,7 @@ void print_graph(GraphType *g)
     for(int u=0; u<g->n; u++)
     {
         now=g->adj_list[u];
-        printf("Á¤Á¡ %d", u);
+        printf("ì •ì  %d", u);
         while(now){
             printf("-> %d", now->vertex);
             now=now->link;
@@ -84,13 +84,13 @@ void print_graph(GraphType *g)
 
 int main(void)
 {
-    //ÀÎÁ¢¸®½ºÆ® ±×·¡ÇÁ¸¦ Á¤ÀÇ
+    //ì¸ì ‘ë¦¬ìŠ¤íŠ¸ ê·¸ë˜í”„ë¥¼ ì •ì˜
     GraphType G;
 
-    //ÀÎÁ¢¸®½ºÆ® ±×·¡ÇÁ ÃÊ±âÈ­
+    //ì¸ì ‘ë¦¬ìŠ¤íŠ¸ ê·¸ë˜í”„ ì´ˆê¸°í™”
     graph_init(&G);
 
-    //Á¤Á¡5°³À» »ğÀÔÇÑ´Ù.
+    //ì •ì 5ê°œì„ ì‚½ì…í•œë‹¤.
     for(int i=0;i<5; i++){
         insert_vertex(&G, i);
     }
